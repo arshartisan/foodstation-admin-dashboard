@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -18,10 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Plus,
   Search,
-  Edit,
-  Trash,
   MoreHorizontal,
   User,
   Calendar,
@@ -41,6 +37,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
 import { CustomerMetricCard } from "@/components/pages/customer/customer-metric";
+import { CustomerDetailsModal } from "@/components/pages/customer/customer-details-modal";
 
 const initialCustomers = [
   {
@@ -270,7 +267,7 @@ export default function CustomersPage() {
         </div>
 
         <Card>
-          <CardHeader className="p-4">
+          <CardHeader className="">
             <CardTitle>All Customers</CardTitle>
             <CardDescription>
               Showing {customers.length} customers
@@ -373,14 +370,14 @@ export default function CustomersPage() {
         </Card>
       </div>
 
-      {/* {selectedCustomer && (
+      {selectedCustomer && (
         <CustomerDetailsModal
           open={isDetailsModalOpen}
           onOpenChange={setIsDetailsModalOpen}
           customer={selectedCustomer}
           onStatusUpdate={(id, status) => handleUpdateStatus(id, status)}
         />
-      )} */}
+      )}
     </div>
   );
 }
