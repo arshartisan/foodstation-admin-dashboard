@@ -12,6 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MetricCard from "@/components/metric-card";
 import { SystemRevenueChart } from "@/components/charts/system-revenue-chart";
 import { RestaurantPerformanceTable } from "@/components/table/restaurant-performance-table";
+import { RecentActivitiesTable } from "@/components/table/recent-activities-table";
 
 export default function DashboardPage() {
   return (
@@ -107,7 +108,9 @@ export default function DashboardPage() {
               View All
             </Button>
           </CardHeader>
-          <CardContent>{/* <RecentActivitiesTable /> */}</CardContent>
+          <CardContent>
+            <RecentActivitiesTable />
+          </CardContent>
         </Card>
         <Card>
           <CardHeader>
