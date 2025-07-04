@@ -37,6 +37,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import RestaurantStatus from "@/components/pages/vendors/vendor-status";
+import { CommonMetricCard } from "@/components/common-metric";
+import { RestaurantDetailsModal } from "@/components/pages/vendors/restaurant-details-modal";
 
 const initialRestaurants = [
   {
@@ -178,67 +180,34 @@ export default function VendorsPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Restaurants
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{restaurants.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {restaurants.filter((r) => r.status === "active").length} active
-              restaurants
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Pending Approval
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {restaurants.filter((r) => r.status === "pending").length}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Restaurants waiting for approval
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Average Rating
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold flex items-center">
-              {(
-                restaurants
-                  .filter((r) => r.status === "active")
-                  .reduce((acc, r) => acc + r.rating, 0) /
-                restaurants.filter((r) => r.status === "active").length
-              ).toFixed(1)}
-              <Star className="h-4 w-4 ml-1 fill-amber-500 text-amber-500" />
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Across all active restaurants
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$221,890</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Combined monthly revenue
-            </p>
-          </CardContent>
-        </Card>
+        <CommonMetricCard
+          title={"Total Restaurants"}
+          value={restaurants.length}
+          description={`${
+            restaurants.filter((r) => r.status === "active").length
+          } active
+              restaurants`}
+        />
+        <CommonMetricCard
+          title={"Pending Approval"}
+          value={restaurants.filter((r) => r.status === "pending").length}
+          description={`Restaurants waiting for approval`}
+        />
+        <CommonMetricCard
+          title={" Average Rating"}
+          value={(
+            restaurants
+              .filter((r) => r.status === "active")
+              .reduce((acc, r) => acc + r.rating, 0) /
+            restaurants.filter((r) => r.status === "active").length
+          ).toFixed(1)}
+          description={` Across all active restaurants`}
+        />
+        <CommonMetricCard
+          title={"Total Revenue"}
+          value={`$221,890`}
+          description={`Combined monthly revenue`}
+        />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -311,7 +280,7 @@ export default function VendorsPage() {
         </div>
 
         <Card>
-          <CardHeader className="p-4">
+          <CardHeader className="">
             <CardTitle>All Restaurants</CardTitle>
             <CardDescription>
               Showing {restaurants.length} restaurants
@@ -447,14 +416,14 @@ export default function VendorsPage() {
         </Card>
       </div>
 
-      {/* {selectedRestaurant && (
+      {selectedRestaurant && (
         <RestaurantDetailsModal
           open={isDetailsModalOpen}
           onOpenChange={setIsDetailsModalOpen}
           restaurant={selectedRestaurant}
           onStatusUpdate={(id, status) => handleUpdateStatus(id, status)}
         />
-      )} */}
+      )}
     </div>
   );
 }

@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
-import { CustomerMetricCard } from "@/components/pages/customer/customer-metric";
+import { CustomerMetricCard } from "@/components/common-metric";
 import { CustomerDetailsModal } from "@/components/pages/customer/customer-details-modal";
 
 const initialCustomers = [
