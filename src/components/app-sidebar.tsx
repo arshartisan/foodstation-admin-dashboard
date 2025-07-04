@@ -25,6 +25,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Separator } from "./ui/separator";
+import logo from "@/assets/icon.svg";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -47,8 +48,9 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
-                  <Bike className="size-4 bg-[r" />
+                <div className="flex aspect-square size-8 items-center justify-center bg-primary rounded-lg text-sidebar-primary-foreground">
+                  {/* <Bike className="size-4" /> */}
+                  <img className="rounded-md" src={logo} alt="fs-logo" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">FS Admin</span>
