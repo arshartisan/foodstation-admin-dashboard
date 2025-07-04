@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import {
   Users,
   Store,
@@ -15,6 +15,10 @@ import {
   Package,
   AlertCircle,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MetricCard from "@/components/metric-card";
+import { SystemRevenueChart } from "@/components/charts/system-revenue-chart";
 
 const stats = [
   {
@@ -76,112 +80,150 @@ const recentOrders = [
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="flex flex-col gap-6 pb-6">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight">System Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's what's happening with your delivery system.
+          Welcome back! Here's an overview of your entire system.
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.name}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.name}
-                </CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">
-                  <span
-                    className={
-                      stat.changeType === "positive"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }
-                  >
-                    {stat.change}
-                  </span>{" "}
-                  from last month
-                </p>
-              </CardContent>
-            </Card>
-          );
-        })}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <Tabs defaultValue="day" className="w-full sm:w-auto">
+          <TabsList>
+            <TabsTrigger value="day">Today</TabsTrigger>
+            <TabsTrigger value="week">This Week</TabsTrigger>
+            <TabsTrigger value="month">This Month</TabsTrigger>
+            <TabsTrigger value="year">This Year</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
-      {/* Recent Orders */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
-            <CardDescription>
-              Latest delivery orders from your customers
-            </CardDescription>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <MetricCard
+          title="Total Restaurants"
+          value="248"
+          description="+12 new this month"
+          trend="up"
+          trendValue="4.9%"
+          icon={Store}
+        />
+        <MetricCard
+          title="Active Customers"
+          value="24,521"
+          description="+2,145 this month"
+          trend="up"
+          trendValue="10.2%"
+          icon={Users}
+        />
+        <MetricCard
+          title="Active Drivers"
+          value="842"
+          description="-14 this month"
+          trend="down"
+          trendValue="1.6%"
+          icon={Truck}
+        />
+        <MetricCard
+          title="Total Revenue"
+          value="$1.2M"
+          description="+$124K this month"
+          trend="up"
+          trendValue="8.3%"
+          icon={DollarSign}
+        />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="lg:col-span-4">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>System Revenue</CardTitle>
+              <CardDescription>
+                Monthly revenue across all restaurants
+              </CardDescription>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {recentOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="flex items-center justify-between"
-                >
-                  <div>
-                    <p className="font-medium">{order.id}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {order.customer}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium">{order.amount}</p>
-                    <Badge
-                      variant={
-                        order.status === "Delivered"
-                          ? "default"
-                          : order.status === "In Transit"
-                          ? "secondary"
-                          : order.status === "Processing"
-                          ? "outline"
-                          : "destructive"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <SystemRevenueChart />
           </CardContent>
         </Card>
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Top Performing Restaurants</CardTitle>
+            <CardDescription>Based on monthly revenue</CardDescription>
+          </CardHeader>
+          <CardContent>{/* <RestaurantPerformanceTable /> */}</CardContent>
+        </Card>
+      </div>
 
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Recent Activities</CardTitle>
+              <CardDescription>
+                Latest actions across the platform
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm">
+              View All
+            </Button>
+          </CardHeader>
+          <CardContent>{/* <RecentActivitiesTable /> */}</CardContent>
+        </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Quick Stats</CardTitle>
-            <CardDescription>Key metrics at a glance</CardDescription>
+            <CardTitle>System Statistics</CardTitle>
+            <CardDescription>Key performance indicators</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <Package className="h-4 w-4 mr-2 text-blue-500" />
-                <span className="text-sm">Total Products: 2,456</span>
+          <CardContent className="space-y-8">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-medium">Order Completion Rate</div>
+                <div className="text-sm font-medium">94.2%</div>
               </div>
-              <div className="flex items-center">
-                <Store className="h-4 w-4 mr-2 text-green-500" />
-                <span className="text-sm">Active Vendors: 89</span>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full"
+                  style={{ width: "94.2%" }}
+                />
               </div>
-              <div className="flex items-center">
-                <Users className="h-4 w-4 mr-2 text-purple-500" />
-                <span className="text-sm">Staff Members: 12</span>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-medium">Average Delivery Time</div>
+                <div className="text-sm font-medium">28 mins</div>
               </div>
-              <div className="flex items-center">
-                <AlertCircle className="h-4 w-4 mr-2 text-orange-500" />
-                <span className="text-sm">Pending Issues: 3</span>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full"
+                  style={{ width: "75%" }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-medium">Customer Satisfaction</div>
+                <div className="text-sm font-medium">4.8/5</div>
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full"
+                  style={{ width: "96%" }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-medium">Restaurant Retention</div>
+                <div className="text-sm font-medium">92.5%</div>
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full"
+                  style={{ width: "92.5%" }}
+                />
               </div>
             </div>
           </CardContent>

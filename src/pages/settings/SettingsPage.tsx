@@ -21,7 +21,7 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid grid-cols-3 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>General Settings</CardTitle>
