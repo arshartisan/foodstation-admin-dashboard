@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
+import { CustomerMetricCard } from "@/components/pages/customer/customer-metric";
 
 const initialCustomers = [
   {
@@ -184,58 +185,26 @@ export default function CustomersPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Customers
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{customers.length}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {activeCustomers} active, {inactiveCustomers} inactive
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalOrders}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Across all customers
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Average Orders
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {(totalOrders / customers.length).toFixed(1)}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Orders per customer
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ${totalSpent.toLocaleString()}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Lifetime customer value
-            </p>
-          </CardContent>
-        </Card>
+        <CustomerMetricCard
+          title={"Total Customers"}
+          value={customers.length}
+          description={`${activeCustomers} active, ${inactiveCustomers} inactive`}
+        />
+        <CustomerMetricCard
+          title={"Total Orders"}
+          value={totalOrders}
+          description={"Across all customers"}
+        />
+        <CustomerMetricCard
+          title={"Average Orders"}
+          value={(totalOrders / customers.length).toFixed(1)}
+          description={`Orders per customer`}
+        />
+        <CustomerMetricCard
+          title={"Total Spent"}
+          value={`$${totalSpent.toLocaleString()}`}
+          description={`Lifetime customer value`}
+        />
       </div>
 
       <div className="flex flex-col gap-4">
