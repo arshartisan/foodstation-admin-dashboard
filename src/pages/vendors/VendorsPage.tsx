@@ -173,9 +173,9 @@ export default function VendorsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Restaurants</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Vendors</h1>
         <p className="text-muted-foreground">
-          Manage all restaurants in the system.
+          Manage all venodors in the system.
         </p>
       </div>
 
