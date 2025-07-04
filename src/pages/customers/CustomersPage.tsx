@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
-import { CustomerMetricCard } from "@/components/common-metric";
+import { CommonMetricCard } from "@/components/common-metric";
 import { CustomerDetailsModal } from "@/components/pages/customer/customer-details-modal";
 
 const initialCustomers = [
@@ -182,22 +182,22 @@ export default function CustomersPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <CustomerMetricCard
+        <CommonMetricCard
           title={"Total Customers"}
           value={customers.length}
           description={`${activeCustomers} active, ${inactiveCustomers} inactive`}
         />
-        <CustomerMetricCard
+        <CommonMetricCard
           title={"Total Orders"}
           value={totalOrders}
           description={"Across all customers"}
         />
-        <CustomerMetricCard
+        <CommonMetricCard
           title={"Average Orders"}
           value={(totalOrders / customers.length).toFixed(1)}
           description={`Orders per customer`}
         />
-        <CustomerMetricCard
+        <CommonMetricCard
           title={"Total Spent"}
           value={`$${totalSpent.toLocaleString()}`}
           description={`Lifetime customer value`}
