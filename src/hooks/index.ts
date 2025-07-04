@@ -74,3 +74,5 @@ export function useAsync<T>(asyncFn: () => Promise<T>, deps: any[] = []) {
 
   return state;
 }
+
+export { useDocumentTitle } from './useDocumentTitle';
