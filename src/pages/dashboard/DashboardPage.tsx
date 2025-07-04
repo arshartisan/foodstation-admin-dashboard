@@ -9,7 +9,7 @@ import {
 import { Users, Store, Truck, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MetricCard from "@/components/metric-card";
+import MetricCard from "@/components/pages/dashboard/metric-card";
 import { SystemRevenueChart } from "@/components/charts/system-revenue-chart";
 import { RestaurantPerformanceTable } from "@/components/table/restaurant-performance-table";
 import { RecentActivitiesTable } from "@/components/table/recent-activities-table";
