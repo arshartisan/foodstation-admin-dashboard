@@ -5,8 +5,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { useDocumentTitle } from "@/hooks";
 
 export default function DashboardLayout() {
+  useDocumentTitle();
+
   return (
     <SidebarProvider>
       <AppSidebar />
