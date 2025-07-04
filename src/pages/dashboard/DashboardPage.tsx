@@ -6,77 +6,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 // import { Badge } from "@/components/ui/badge";
-import {
-  Users,
-  Store,
-  Truck,
-  DollarSign,
-  ShoppingCart,
-  Package,
-  AlertCircle,
-} from "lucide-react";
+import { Users, Store, Truck, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MetricCard from "@/components/metric-card";
 import { SystemRevenueChart } from "@/components/charts/system-revenue-chart";
-
-const stats = [
-  {
-    name: "Total Orders",
-    value: "1,234",
-    change: "+12%",
-    changeType: "positive",
-    icon: ShoppingCart,
-  },
-  {
-    name: "Active Customers",
-    value: "856",
-    change: "+8%",
-    changeType: "positive",
-    icon: Users,
-  },
-  {
-    name: "Revenue",
-    value: "$45,231",
-    change: "+15%",
-    changeType: "positive",
-    icon: DollarSign,
-  },
-  {
-    name: "Pending Deliveries",
-    value: "23",
-    change: "-5%",
-    changeType: "negative",
-    icon: Truck,
-  },
-];
-
-const recentOrders = [
-  {
-    id: "ORD001",
-    customer: "John Doe",
-    status: "Delivered",
-    amount: "$125.00",
-  },
-  {
-    id: "ORD002",
-    customer: "Jane Smith",
-    status: "In Transit",
-    amount: "$89.50",
-  },
-  {
-    id: "ORD003",
-    customer: "Bob Johnson",
-    status: "Processing",
-    amount: "$234.75",
-  },
-  {
-    id: "ORD004",
-    customer: "Alice Brown",
-    status: "Pending",
-    amount: "$67.20",
-  },
-];
+import { RestaurantPerformanceTable } from "@/components/table/restaurant-performance-table";
 
 export default function DashboardPage() {
   return (
@@ -153,7 +88,9 @@ export default function DashboardPage() {
             <CardTitle>Top Performing Restaurants</CardTitle>
             <CardDescription>Based on monthly revenue</CardDescription>
           </CardHeader>
-          <CardContent>{/* <RestaurantPerformanceTable /> */}</CardContent>
+          <CardContent>
+            <RestaurantPerformanceTable />
+          </CardContent>
         </Card>
       </div>
 
