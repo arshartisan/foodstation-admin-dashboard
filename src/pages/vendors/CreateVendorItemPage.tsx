@@ -19,7 +19,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowLeft, Upload, Utensils, ShoppingCart } from "lucide-react";
+import {
+  ArrowLeft,
+  Upload,
+  Utensils,
+  ShoppingCart,
+  Settings,
+} from "lucide-react";
+import { CategoryModal } from "@/components/pages/vendors/CategoryModal";
 
 export default function CreateVendorItemPage() {
   const navigate = useNavigate();
@@ -44,8 +51,9 @@ export default function CreateVendorItemPage() {
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
-  const foodCategories = [
+  const [foodCategories, setFoodCategories] = useState([
     "Appetizers",
     "Main Course",
     "Salads",
@@ -58,9 +66,9 @@ export default function CreateVendorItemPage() {
     "Dinner",
     "Snacks",
     "Specials",
-  ];
+  ]);
 
-  const groceryCategories = [
+  const [groceryCategories, setGroceryCategories] = useState([
     "Fruits",
     "Vegetables",
     "Dairy",
@@ -75,7 +83,7 @@ export default function CreateVendorItemPage() {
     "Health & Beauty",
     "Household",
     "Other",
-  ];
+  ]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -90,6 +98,22 @@ export default function CreateVendorItemPage() {
     if (file) {
       setFormData((prev) => ({ ...prev, image: file }));
     }
+  };
+
+  const handleCategorySelect = (category: string) => {
+    handleInputChange("category", category);
+  };
+
+  const handleCategoriesUpdate = (updatedCategories: string[]) => {
+    if (vendor.type === "food") {
+      setFoodCategories(updatedCategories);
+    } else {
+      setGroceryCategories(updatedCategories);
+    }
+  };
+
+  const getCurrentCategories = () => {
+    return vendor.type === "food" ? foodCategories : groceryCategories;
   };
 
   const validateForm = () => {
@@ -230,29 +254,40 @@ export default function CreateVendorItemPage() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category *</Label>
-                  <Select
-                    value={formData.category}
-                    onValueChange={(value) =>
-                      handleInputChange("category", value)
-                    }
-                  >
-                    <SelectTrigger
-                      className={errors.category ? "border-red-500" : ""}
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="category">Category *</Label>
+                  </div>
+                  <div className="flex flex-row justify-between">
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) =>
+                        handleInputChange("category", value)
+                      }
                     >
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {(vendor.type === "food"
-                        ? foodCategories
-                        : groceryCategories
-                      ).map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      <SelectTrigger
+                        className={errors.category ? "border-red-500" : ""}
+                      >
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getCurrentCategories().map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      //   size="sm"
+                      onClick={() => setIsCategoryModalOpen(true)}
+                      className="flex items-center gap-2"
+                    >
+                      <Settings className="h-4 w-4" />
+                      Manage Categories
+                    </Button>
+                  </div>
                   {errors.category && (
                     <p className="text-sm text-red-500">{errors.category}</p>
                   )}
@@ -403,6 +438,16 @@ export default function CreateVendorItemPage() {
           {/* Submit Button */}
         </div>
       </form>
+
+      {/* Category Management Modal */}
+      <CategoryModal
+        open={isCategoryModalOpen}
+        onOpenChange={setIsCategoryModalOpen}
+        vendorType={vendor.type as "food" | "grocery"}
+        currentCategories={getCurrentCategories()}
+        onCategorySelect={handleCategorySelect}
+        onCategoriesUpdate={handleCategoriesUpdate}
+      />
     </div>
   );
 }
