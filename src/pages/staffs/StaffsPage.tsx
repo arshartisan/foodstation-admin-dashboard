@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -223,6 +224,7 @@ const getStatusBadgeColor = (status: string) => {
 };
 
 export default function StaffsPage() {
+  const navigate = useNavigate();
   const [staffs, setStaffs] = useState(initialStaffs);
   const [selectedTab, setSelectedTab] = useState("all");
 
@@ -271,7 +273,7 @@ export default function StaffsPage() {
             operations.
           </p>
         </div>
-        <Button>
+        <Button onClick={() => navigate("/staffs/create")}>
           <Plus className="mr-2 h-4 w-4" />
           Add Team Member
         </Button>
