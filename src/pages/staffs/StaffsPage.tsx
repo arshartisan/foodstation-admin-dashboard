@@ -24,9 +24,12 @@ import {
   ChevronDown,
   Filter,
   Plus,
-  Shield,
+  Truck,
+  MapPin,
   UserCheck,
   UserX,
+  Bike,
+  Car,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -46,106 +49,142 @@ const initialStaffs = [
   {
     id: 1,
     name: "John Anderson",
-    email: "john.anderson@company.com",
+    email: "john.anderson@delivery.com",
     phone: "+1 (555) 123-4567",
-    role: "Admin",
-    department: "Management",
+    role: "Regional Manager",
+    department: "North Region",
     status: "active",
     hireDate: "Jan 15, 2022",
     lastLogin: "2 hours ago",
-    permissions: ["full_access", "user_management", "system_config"],
-    salary: "$85,000",
+    permissions: [
+      "region_management",
+      "delivery_oversight",
+      "staff_management",
+    ],
+    salary: "$65,000",
+    deliveryZone: "North District",
+    vehicleType: "Company Car",
+    deliveriesCompleted: 0,
   },
   {
     id: 2,
     name: "Maria Garcia",
-    email: "maria.garcia@company.com",
+    email: "maria.garcia@delivery.com",
     phone: "+1 (555) 234-5678",
-    role: "Manager",
-    department: "Operations",
+    role: "Regional Manager",
+    department: "South Region",
     status: "active",
     hireDate: "Mar 3, 2022",
     lastLogin: "1 day ago",
-    permissions: ["order_management", "staff_view", "reports"],
-    salary: "$65,000",
+    permissions: [
+      "region_management",
+      "delivery_oversight",
+      "performance_reports",
+    ],
+    salary: "$63,000",
+    deliveryZone: "South District",
+    vehicleType: "Company Car",
+    deliveriesCompleted: 0,
   },
   {
     id: 3,
     name: "Alex Chen",
-    email: "alex.chen@company.com",
+    email: "alex.chen@delivery.com",
     phone: "+1 (555) 345-6789",
-    role: "Staff",
-    department: "Customer Service",
+    role: "Delivery Person",
+    department: "North Region",
     status: "active",
     hireDate: "May 22, 2022",
     lastLogin: "3 hours ago",
-    permissions: ["customer_support", "order_view"],
-    salary: "$45,000",
+    permissions: ["delivery_execution", "order_updates"],
+    salary: "$42,000",
+    deliveryZone: "Zone A1",
+    vehicleType: "Motorcycle",
+    deliveriesCompleted: 1247,
   },
   {
     id: 4,
     name: "Sarah Wilson",
-    email: "sarah.wilson@company.com",
+    email: "sarah.wilson@delivery.com",
     phone: "+1 (555) 456-7890",
-    role: "Manager",
-    department: "Finance",
+    role: "Delivery Person",
+    department: "South Region",
     status: "active",
     hireDate: "Jul 10, 2022",
     lastLogin: "5 hours ago",
-    permissions: ["financial_reports", "payment_management"],
-    salary: "$70,000",
+    permissions: ["delivery_execution", "order_updates"],
+    salary: "$44,000",
+    deliveryZone: "Zone B2",
+    vehicleType: "Van",
+    deliveriesCompleted: 1089,
   },
   {
     id: 5,
     name: "Michael Brown",
-    email: "michael.brown@company.com",
+    email: "michael.brown@delivery.com",
     phone: "+1 (555) 567-8901",
-    role: "Staff",
-    department: "IT Support",
+    role: "Delivery Person",
+    department: "East Region",
     status: "inactive",
     hireDate: "Sep 5, 2022",
     lastLogin: "2 weeks ago",
-    permissions: ["technical_support"],
-    salary: "$50,000",
+    permissions: ["delivery_execution"],
+    salary: "$40,000",
+    deliveryZone: "Zone C1",
+    vehicleType: "Bicycle",
+    deliveriesCompleted: 892,
   },
   {
     id: 6,
     name: "Emily Davis",
-    email: "emily.davis@company.com",
+    email: "emily.davis@delivery.com",
     phone: "+1 (555) 678-9012",
-    role: "Staff",
-    department: "Customer Service",
+    role: "Delivery Person",
+    department: "North Region",
     status: "active",
     hireDate: "Nov 18, 2022",
     lastLogin: "1 hour ago",
-    permissions: ["customer_support", "order_view"],
-    salary: "$45,000",
+    permissions: ["delivery_execution", "order_updates"],
+    salary: "$41,000",
+    deliveryZone: "Zone A2",
+    vehicleType: "Motorcycle",
+    deliveriesCompleted: 923,
   },
   {
     id: 7,
     name: "Robert Taylor",
-    email: "robert.taylor@company.com",
+    email: "robert.taylor@delivery.com",
     phone: "+1 (555) 789-0123",
-    role: "Manager",
-    department: "Operations",
+    role: "Regional Manager",
+    department: "East Region",
     status: "active",
     hireDate: "Dec 7, 2022",
     lastLogin: "4 hours ago",
-    permissions: ["order_management", "vendor_management", "reports"],
-    salary: "$68,000",
+    permissions: [
+      "region_management",
+      "delivery_oversight",
+      "team_coordination",
+    ],
+    salary: "$62,000",
+    deliveryZone: "East District",
+    vehicleType: "Company Car",
+    deliveriesCompleted: 0,
   },
   {
     id: 8,
     name: "Lisa Martinez",
-    email: "lisa.martinez@company.com",
+    email: "lisa.martinez@delivery.com",
     phone: "+1 (555) 890-1234",
-    role: "Staff",
-    department: "Marketing",
+    role: "Delivery Person",
+    department: "South Region",
     status: "active",
     hireDate: "Feb 12, 2023",
     lastLogin: "6 hours ago",
-    permissions: ["content_management", "analytics_view"],
-    salary: "$52,000",
+    permissions: ["delivery_execution", "customer_service"],
+    salary: "$43,000",
+    deliveryZone: "Zone B1",
+    vehicleType: "Van",
+    deliveriesCompleted: 756,
   },
 ];
 
@@ -164,11 +203,9 @@ const initialStaffs = [
 
 const getRoleBadgeVariant = (role: string) => {
   switch (role.toLowerCase()) {
-    case "admin":
-      return "outline";
-    case "manager":
+    case "regional manager":
       return "default";
-    case "staff":
+    case "delivery person":
       return "secondary";
     default:
       return "outline";
@@ -197,8 +234,8 @@ export default function StaffsPage() {
     );
 
     toast({
-      title: "Staff status updated",
-      description: `Staff status has been updated to ${newStatus}`,
+      title: "Team member status updated",
+      description: `Team member status has been updated to ${newStatus}`,
     });
   };
 
@@ -206,20 +243,20 @@ export default function StaffsPage() {
     if (selectedTab === "all") return true;
     if (selectedTab === "active") return staff.status === "active";
     if (selectedTab === "inactive") return staff.status === "inactive";
-    if (selectedTab === "admin") return staff.role.toLowerCase() === "admin";
-    if (selectedTab === "manager")
-      return staff.role.toLowerCase() === "manager";
-    if (selectedTab === "staff") return staff.role.toLowerCase() === "staff";
+    if (selectedTab === "managers")
+      return staff.role.toLowerCase() === "regional manager";
+    if (selectedTab === "delivery")
+      return staff.role.toLowerCase() === "delivery person";
     return true;
   });
 
   const activeStaffs = staffs.filter((s) => s.status === "active").length;
   const inactiveStaffs = staffs.filter((s) => s.status === "inactive").length;
-  const adminCount = staffs.filter(
-    (s) => s.role.toLowerCase() === "admin"
-  ).length;
   const managerCount = staffs.filter(
-    (s) => s.role.toLowerCase() === "manager"
+    (s) => s.role.toLowerCase() === "regional manager"
+  ).length;
+  const deliveryPersonCount = staffs.filter(
+    (s) => s.role.toLowerCase() === "delivery person"
   ).length;
 
   return (
@@ -227,38 +264,42 @@ export default function StaffsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">
-            Staff Management
+            Delivery Team Management
           </h1>
           <p className="text-muted-foreground">
-            Manage your team members, roles, and permissions.
+            Manage delivery personnel, regional managers, and delivery
+            operations.
           </p>
         </div>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
-          Add Staff
+          Add Team Member
         </Button>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <CommonMetricCard
-          title={"Total Staff"}
+          title={"Total Team Members"}
           value={staffs.length}
           description={`${activeStaffs} active, ${inactiveStaffs} inactive`}
         />
         <CommonMetricCard
-          title={"Administrators"}
-          value={adminCount}
-          description={"System administrators"}
-        />
-        <CommonMetricCard
-          title={"Managers"}
+          title={"Regional Managers"}
           value={managerCount}
-          description={"Department managers"}
+          description={"Managing delivery regions"}
         />
         <CommonMetricCard
-          title={"Staff Members"}
-          value={staffs.filter((s) => s.role.toLowerCase() === "staff").length}
-          description={"Regular staff members"}
+          title={"Delivery Personnel"}
+          value={deliveryPersonCount}
+          description={"Active delivery team"}
+        />
+        <CommonMetricCard
+          title={"Total Deliveries"}
+          value={staffs.reduce(
+            (total, staff) => total + (staff.deliveriesCompleted || 0),
+            0
+          )}
+          description={"Completed this month"}
         />
       </div>
 
@@ -270,12 +311,11 @@ export default function StaffsPage() {
             className="w-full sm:w-auto"
           >
             <TabsList>
-              <TabsTrigger value="all">All Staff</TabsTrigger>
+              <TabsTrigger value="all">All Team</TabsTrigger>
               <TabsTrigger value="active">Active</TabsTrigger>
               <TabsTrigger value="inactive">Inactive</TabsTrigger>
-              <TabsTrigger value="admin">Admins</TabsTrigger>
-              <TabsTrigger value="manager">Managers</TabsTrigger>
-              <TabsTrigger value="staff">Staff</TabsTrigger>
+              <TabsTrigger value="managers">Managers</TabsTrigger>
+              <TabsTrigger value="delivery">Delivery</TabsTrigger>
             </TabsList>
           </Tabs>
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -283,7 +323,7 @@ export default function StaffsPage() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search staff..."
+                placeholder="Search team members..."
                 className="w-full pl-8 bg-background"
               />
             </div>
@@ -298,25 +338,32 @@ export default function StaffsPage() {
               <DropdownMenuContent align="end" className="w-[200px]">
                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel>Department</DropdownMenuLabel>
+                <DropdownMenuLabel>Region</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem checked>
-                  Management
+                  North Region
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  Operations
+                  South Region
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  Customer Service
+                  East Region
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  Finance
+                  West Region
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Vehicle Type</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem checked>
+                  Motorcycle
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked>Van</DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked>
+                  Bicycle
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  IT Support
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked>
-                  Marketing
+                  Company Car
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Hire Date</DropdownMenuLabel>
@@ -339,26 +386,29 @@ export default function StaffsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Staff Directory</CardTitle>
+            <CardTitle>Delivery Team Directory</CardTitle>
             <CardDescription>
-              Showing {filteredStaffs.length} staff members
+              Showing {filteredStaffs.length} team members
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Staff Member</TableHead>
+                  <TableHead>Team Member</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Department
+                    Region/Zone
                   </TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead className="hidden lg:table-cell">
-                    Hire Date
+                    Vehicle
+                  </TableHead>
+                  <TableHead className="hidden xl:table-cell">
+                    Deliveries
                   </TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Last Login
+                    Last Active
                   </TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -380,18 +430,47 @@ export default function StaffsPage() {
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {staff.department}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {/* {getRoleIcon(staff.role)} */}
-                        <Badge variant={getRoleBadgeVariant(staff.role)}>
-                          {staff.role}
-                        </Badge>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <div className="font-medium text-sm">
+                            {staff.department}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {staff.deliveryZone}
+                          </div>
+                        </div>
                       </div>
                     </TableCell>
+                    <TableCell>
+                      <Badge variant={getRoleBadgeVariant(staff.role)}>
+                        {staff.role}
+                      </Badge>
+                    </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      {staff.hireDate}
+                      <div className="flex items-center gap-1">
+                        {staff.vehicleType === "Motorcycle" && (
+                          <Bike className="h-4 w-4 text-blue-600" />
+                        )}
+                        {staff.vehicleType === "Van" && (
+                          <Truck className="h-4 w-4 text-green-600" />
+                        )}
+                        {staff.vehicleType === "Company Car" && (
+                          <Car className="h-4 w-4 text-purple-600" />
+                        )}
+                        {staff.vehicleType === "Bicycle" && (
+                          <Bike className="h-4 w-4 text-orange-600" />
+                        )}
+                        <span className="text-sm">{staff.vehicleType}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden xl:table-cell">
+                      <div className="text-sm font-medium">
+                        {staff.deliveriesCompleted || 0}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        completed
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Badge
@@ -429,6 +508,9 @@ export default function StaffsPage() {
                           <DropdownMenuItem>
                             Manage permissions
                           </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            View delivery history
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           {staff.status === "active" && (
                             <DropdownMenuItem
@@ -436,7 +518,7 @@ export default function StaffsPage() {
                                 handleUpdateStatus(staff.id, "inactive")
                               }
                             >
-                              Deactivate staff
+                              Deactivate member
                             </DropdownMenuItem>
                           )}
                           {staff.status === "inactive" && (
@@ -445,15 +527,18 @@ export default function StaffsPage() {
                                 handleUpdateStatus(staff.id, "active")
                               }
                             >
-                              Activate staff
+                              Activate member
                             </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>
-                            View login history
+                            Assign delivery zone
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            Update vehicle info
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-destructive">
-                            Remove staff
+                            Remove from team
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
