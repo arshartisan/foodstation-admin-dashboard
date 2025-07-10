@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
-  Bike,
   Users,
   Store,
   Truck,
@@ -10,6 +9,7 @@ import {
   Receipt,
   Settings,
   LogOut,
+  MessageSquare,
 } from "lucide-react";
 
 import {
@@ -33,6 +33,7 @@ const navigation = [
   { name: "Vendors", href: "/vendors", icon: Store },
   { name: "Delivery Orders", href: "/delivery-orders", icon: Truck },
   { name: "Staff", href: "/staffs", icon: UserCheck },
+  { name: "Issues & Tickets", href: "/issues", icon: MessageSquare },
   { name: "Transactions", href: "/transactions", icon: Receipt },
   { name: "Payments", href: "/payments", icon: CreditCard },
   { name: "Settings", href: "/settings", icon: Settings },
@@ -53,8 +54,8 @@ export function AppSidebar() {
                   <img className="rounded-md" src={logo} alt="fs-logo" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">FS Admin</span>
-                  <span className="truncate text-xs">Food Service Admin</span>
+                  <span className="truncate font-semibold">Admin</span>
+                  <span className="truncate text-xs">Food Station</span>
                 </div>
               </Link>
             </SidebarMenuButton>
