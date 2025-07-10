@@ -18,6 +18,7 @@ import CreateStaffPage from "@/pages/staffs/CreateStaffPage";
 import TransactionsPage from "@/pages/transactions/TransactionsPage";
 import PaymentsPage from "@/pages/payments/PaymentsPage";
 import SettingsPage from "@/pages/settings/SettingsPage";
+import IssuesPage from "@/pages/issues/IssuesPage";
 
 export const router = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ export const router = createBrowserRouter([
       {
         path: "settings",
         element: <SettingsPage />,
+      },
+      {
+        path: "issues",
+        element: <IssuesPage />,
       },
     ],
   },

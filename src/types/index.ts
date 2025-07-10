@@ -90,3 +90,28 @@ export interface Payment {
   amount: number;
   createdAt: Date;
 }
+
+// Issue and Ticket types
+export interface Issue {
+  id: string;
+  title: string;
+  description: string;
+  reportedBy: 'customer' | 'vendor';
+  reporterName: string;
+  reporterId: string;
+  assignedTo?: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: 'open' | 'in-progress' | 'resolved' | 'closed' | 'escalated';
+  category: 'delivery' | 'payment' | 'account' | 'food-quality' | 'billing' | 'technical' | 'other';
+  createdAt: string;
+  updatedAt: string;
+  dueDate?: string;
+  tags: string[];
+}
+
+export interface IssueFilters {
+  priority: string[];
+  status: string[];
+  category: string[];
+  reportedBy: string[];
+}
