@@ -14,6 +14,7 @@ import VendorItemsPage from "@/pages/vendors/VendorItemsPage";
 import CreateVendorItemPage from "@/pages/vendors/CreateVendorItemPage";
 import DeliveryOrdersPage from "@/pages/delivery-orders/DeliveryOrdersPage";
 import StaffsPage from "@/pages/staffs/StaffsPage";
+import CreateStaffPage from "@/pages/staffs/CreateStaffPage";
 import TransactionsPage from "@/pages/transactions/TransactionsPage";
 import PaymentsPage from "@/pages/payments/PaymentsPage";
 import SettingsPage from "@/pages/settings/SettingsPage";
@@ -68,6 +69,10 @@ export const router = createBrowserRouter([
       {
         path: "staffs",
         element: <StaffsPage />,
+      },
+      {
+        path: "staffs/create",
+        element: <CreateStaffPage />,
       },
       {
         path: "transactions",

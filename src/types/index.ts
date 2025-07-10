@@ -53,13 +53,20 @@ export interface OrderItem {
 
 // Staff types
 export interface Staff {
-  id: string;
+  id: number;
   name: string;
   email: string;
   phone: string;
-  role: 'admin' | 'manager' | 'delivery' | 'support';
+  role: 'Regional Manager' | 'Delivery Person';
+  department: string;
   status: 'active' | 'inactive';
-  createdAt: Date;
+  hireDate: string;
+  lastLogin: string;
+  permissions: string[];
+  salary: string;
+  deliveryZone: string;
+  vehicleType: 'Motorcycle' | 'Van' | 'Bicycle' | 'Company Car';
+  deliveriesCompleted: number;
 }
 
 // Transaction types
