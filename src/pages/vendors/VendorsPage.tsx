@@ -18,6 +18,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -36,17 +37,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import RestaurantStatus from "@/components/pages/vendors/vendor-status";
+import VendorStatus from "@/components/pages/vendors/vendor-status";
 import { CommonMetricCard } from "@/components/common-metric";
-import { RestaurantDetailsModal } from "@/components/pages/vendors/restaurant-details-modal";
+import { Vendor } from "@/types/vendor";
+import { VendorDetailsModal } from "@/components/pages/vendors/vendor-details-modal";
 
-const initialRestaurants = [
+const initialVendors: Vendor[] = [
+  // Food Vendors
   {
     id: 1,
     name: "Gourmet Delights",
     owner: "John Smith",
     location: "New York, NY",
-    cuisine: "Fine Dining",
+    category: "Fine Dining",
+    type: "food",
     status: "active",
     rating: 4.8,
     orders: 1245,
@@ -59,7 +63,8 @@ const initialRestaurants = [
     name: "Pasta Paradise",
     owner: "Maria Garcia",
     location: "Chicago, IL",
-    cuisine: "Italian",
+    category: "Italian Restaurant",
+    type: "food",
     status: "active",
     rating: 4.7,
     orders: 1120,
@@ -72,7 +77,8 @@ const initialRestaurants = [
     name: "Burger Bliss",
     owner: "Robert Johnson",
     location: "Los Angeles, CA",
-    cuisine: "American",
+    category: "Fast Food",
+    type: "food",
     status: "active",
     rating: 4.6,
     orders: 1350,
@@ -82,10 +88,11 @@ const initialRestaurants = [
   },
   {
     id: 4,
-    name: "Sushi Supreme",
-    owner: "Yuki Tanaka",
-    location: "Seattle, WA",
-    cuisine: "Japanese",
+    name: "Grand Hotel Restaurant",
+    owner: "Sarah Wilson",
+    location: "Miami, FL",
+    category: "Hotel Restaurant",
+    type: "food",
     status: "active",
     rating: 4.9,
     orders: 980,
@@ -95,23 +102,11 @@ const initialRestaurants = [
   },
   {
     id: 5,
-    name: "Pizza Palace",
-    owner: "Tony Romano",
-    location: "Boston, MA",
-    cuisine: "Italian",
-    status: "active",
-    rating: 4.5,
-    orders: 1050,
-    revenue: "$29,780",
-    joinDate: "May 5, 2023",
-    image: "https://placehold.co/400x400/orange/white",
-  },
-  {
-    id: 6,
-    name: "Taco Time",
-    owner: "Carlos Mendez",
+    name: "Street Food Corner",
+    owner: "Mike Chen",
     location: "Austin, TX",
-    cuisine: "Mexican",
+    category: "Street Food",
+    type: "food",
     status: "pending",
     rating: 0,
     orders: 0,
@@ -119,102 +114,181 @@ const initialRestaurants = [
     joinDate: "Jun 18, 2023",
     image: "https://placehold.co/400x400/orange/white",
   },
+  // Grocery Vendors
+  {
+    id: 6,
+    name: "Fresh Market Co",
+    owner: "Emily Davis",
+    location: "Seattle, WA",
+    category: "Organic Grocery",
+    type: "grocery",
+    status: "active",
+    rating: 4.6,
+    orders: 2340,
+    revenue: "$68,920",
+    joinDate: "Jan 8, 2023",
+    image: "https://placehold.co/400x400/green/white",
+  },
   {
     id: 7,
-    name: "Curry Corner",
-    owner: "Priya Patel",
-    location: "San Francisco, CA",
-    cuisine: "Indian",
-    status: "inactive",
-    rating: 4.2,
-    orders: 720,
-    revenue: "$18,450",
-    joinDate: "Jul 7, 2023",
-    image: "https://placehold.co/400x400/orange/white",
+    name: "Neighborhood Grocery",
+    owner: "David Brown",
+    location: "Phoenix, AZ",
+    category: "General Grocery",
+    type: "grocery",
+    status: "active",
+    rating: 4.3,
+    orders: 1890,
+    revenue: "$45,670",
+    joinDate: "Feb 20, 2023",
+    image: "https://placehold.co/400x400/green/white",
   },
   {
     id: 8,
-    name: "Noodle House",
-    owner: "Liu Wei",
-    location: "Portland, OR",
-    cuisine: "Chinese",
+    name: "Healthy Harvest",
+    owner: "Lisa Green",
+    location: "Denver, CO",
+    category: "Health Food Store",
+    type: "grocery",
     status: "active",
-    rating: 4.4,
+    rating: 4.8,
+    orders: 1560,
+    revenue: "$52,340",
+    joinDate: "Mar 15, 2023",
+    image: "https://placehold.co/400x400/green/white",
+  },
+  {
+    id: 9,
+    name: "Bulk Bargains",
+    owner: "Tom Anderson",
+    location: "Portland, OR",
+    category: "Wholesale Grocery",
+    type: "grocery",
+    status: "inactive",
+    rating: 4.1,
     orders: 890,
-    revenue: "$24,670",
-    joinDate: "Aug 12, 2023",
-    image: "https://placehold.co/400x400/orange/white",
+    revenue: "$23,450",
+    joinDate: "Apr 25, 2023",
+    image: "https://placehold.co/400x400/green/white",
+  },
+  {
+    id: 10,
+    name: "Farm Fresh Produce",
+    owner: "Jennifer Martinez",
+    location: "San Diego, CA",
+    category: "Produce Store",
+    type: "grocery",
+    status: "pending",
+    rating: 0,
+    orders: 0,
+    revenue: "$0",
+    joinDate: "Jun 30, 2023",
+    image: "https://placehold.co/400x400/green/white",
   },
 ];
 
 export default function VendorsPage() {
-  const [restaurants, setRestaurants] = useState(initialRestaurants);
+  const navigate = useNavigate();
+  const [vendors, setVendors] = useState<Vendor[]>(initialVendors);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const [selectedRestaurant, setSelectedRestaurant] = useState<any>(null);
+  const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
+  const [activeTab, setActiveTab] = useState("all");
 
-  const handleViewDetails = (restaurant: any) => {
-    setSelectedRestaurant(restaurant);
+  const handleViewDetails = (vendor: Vendor) => {
+    setSelectedVendor(vendor);
     setIsDetailsModalOpen(true);
   };
 
-  const handleUpdateStatus = (id: number, newStatus: string) => {
-    setRestaurants(
-      restaurants.map((restaurant) =>
-        restaurant.id === id ? { ...restaurant, status: newStatus } : restaurant
+  const handleUpdateStatus = (
+    id: number,
+    newStatus: "active" | "pending" | "inactive"
+  ) => {
+    setVendors(
+      vendors.map((vendor) =>
+        vendor.id === id ? { ...vendor, status: newStatus } : vendor
       )
     );
 
     toast({
-      title: "Restaurant status updated",
-      description: `Restaurant status has been updated to ${newStatus}`,
+      title: "Vendor status updated",
+      description: `Vendor status has been updated to ${newStatus}`,
     });
   };
 
+  const handleAddNewVendor = () => {
+    navigate("/vendors/create");
+  };
+
+  const filteredVendors = vendors.filter((vendor) => {
+    if (activeTab === "all") return true;
+    if (activeTab === "food") return vendor.type === "food";
+    if (activeTab === "grocery") return vendor.type === "grocery";
+    if (activeTab === "active") return vendor.status === "active";
+    if (activeTab === "pending") return vendor.status === "pending";
+    if (activeTab === "inactive") return vendor.status === "inactive";
+    return true;
+  });
+
+  const foodVendors = vendors.filter((v) => v.type === "food");
+  const groceryVendors = vendors.filter((v) => v.type === "grocery");
+  const activeVendors = vendors.filter((v) => v.status === "active");
+  const pendingVendors = vendors.filter((v) => v.status === "pending");
+
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">Vendors</h1>
-        <p className="text-muted-foreground">
-          Manage all venodors in the system.
-        </p>
+      <div className="flex flex-row  justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-bold tracking-tight">Vendors</h1>
+          <p className="text-muted-foreground">
+            Manage all vendors in the system.
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <Button
+            variant="default"
+            className="w-full sm:w-auto"
+            onClick={handleAddNewVendor}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add New Vendor
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <CommonMetricCard
-          title={"Total Restaurants"}
-          value={restaurants.length}
-          description={`${
-            restaurants.filter((r) => r.status === "active").length
-          } active
-              restaurants`}
+          title={"Total Vendors"}
+          value={vendors.length}
+          description={`${activeVendors.length} active vendors`}
+        />
+        <CommonMetricCard
+          title={"Food Vendors"}
+          value={foodVendors.length}
+          description={`Restaurants, hotels, cafes`}
+        />
+        <CommonMetricCard
+          title={"Grocery Vendors"}
+          value={groceryVendors.length}
+          description={`Grocery stores, markets`}
         />
         <CommonMetricCard
           title={"Pending Approval"}
-          value={restaurants.filter((r) => r.status === "pending").length}
-          description={`Restaurants waiting for approval`}
-        />
-        <CommonMetricCard
-          title={" Average Rating"}
-          value={(
-            restaurants
-              .filter((r) => r.status === "active")
-              .reduce((acc, r) => acc + r.rating, 0) /
-            restaurants.filter((r) => r.status === "active").length
-          ).toFixed(1)}
-          description={` Across all active restaurants`}
-        />
-        <CommonMetricCard
-          title={"Total Revenue"}
-          value={`$221,890`}
-          description={`Combined monthly revenue`}
+          value={pendingVendors.length}
+          description={`Vendors waiting for approval`}
         />
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <Tabs defaultValue="all" className="w-full sm:w-auto">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full sm:w-auto"
+          >
             <TabsList>
-              <TabsTrigger value="all">All Restaurants</TabsTrigger>
+              <TabsTrigger value="all">All Vendors</TabsTrigger>
+              <TabsTrigger value="food">Food Vendors</TabsTrigger>
+              <TabsTrigger value="grocery">Grocery Vendors</TabsTrigger>
               <TabsTrigger value="active">Active</TabsTrigger>
               <TabsTrigger value="pending">Pending</TabsTrigger>
               <TabsTrigger value="inactive">Inactive</TabsTrigger>
@@ -225,7 +299,7 @@ export default function VendorsPage() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search restaurants..."
+                placeholder="Search vendors..."
                 className="w-full pl-8 bg-background"
               />
             </div>
@@ -240,25 +314,28 @@ export default function VendorsPage() {
               <DropdownMenuContent align="end" className="w-[200px]">
                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel>Cuisine</DropdownMenuLabel>
+                <DropdownMenuLabel>Type</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem checked>
-                  Italian
+                  Food Vendors
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  American
+                  Grocery Vendors
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Category</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem checked>
+                  Restaurant
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  Japanese
+                  Hotel
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  Mexican
+                  Grocery Store
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem checked>
-                  Indian
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked>
-                  Chinese
+                  Organic Market
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel>Rating</DropdownMenuLabel>
@@ -281,21 +358,22 @@ export default function VendorsPage() {
 
         <Card>
           <CardHeader className="">
-            <CardTitle>All Restaurants</CardTitle>
+            <CardTitle>All Vendors</CardTitle>
             <CardDescription>
-              Showing {restaurants.length} restaurants
+              Showing {filteredVendors.length} vendors
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Restaurant</TableHead>
+                  <TableHead>Vendor</TableHead>
                   <TableHead className="hidden md:table-cell">
                     Location
                   </TableHead>
+                  <TableHead className="hidden md:table-cell">Type</TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Cuisine
+                    Category
                   </TableHead>
                   <TableHead>Rating</TableHead>
                   <TableHead className="hidden lg:table-cell">Orders</TableHead>
@@ -307,14 +385,14 @@ export default function VendorsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {restaurants.map((restaurant) => (
-                  <TableRow key={restaurant.id}>
+                {filteredVendors.map((vendor) => (
+                  <TableRow key={vendor.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-md overflow-hidden">
                           <img
-                            src={restaurant.image || "/placeholder.svg"}
-                            alt={restaurant.name}
+                            src={vendor.image || "/placeholder.svg"}
+                            alt={vendor.name}
                             className="h-full w-full object-cover"
                             onError={(e) => {
                               e.currentTarget.src = "/placeholder.svg";
@@ -322,23 +400,28 @@ export default function VendorsPage() {
                           />
                         </div>
                         <div>
-                          <div className="font-medium">{restaurant.name}</div>
+                          <div className="font-medium">{vendor.name}</div>
                           <div className="text-xs text-muted-foreground">
-                            {restaurant.owner}
+                            {vendor.owner}
                           </div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {restaurant.location}
+                      {vendor.location}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {restaurant.cuisine}
+                      <div className="capitalize">
+                        {vendor.type === "food" ? "Food" : "Grocery"}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {vendor.category}
                     </TableCell>
                     <TableCell>
-                      {restaurant.status !== "pending" ? (
+                      {vendor.status !== "pending" ? (
                         <div className="flex items-center">
-                          {restaurant.rating}
+                          {vendor.rating}
                           <Star className="h-3 w-3 ml-1 fill-amber-500 text-amber-500" />
                         </div>
                       ) : (
@@ -346,17 +429,13 @@ export default function VendorsPage() {
                       )}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      {restaurant.status !== "pending"
-                        ? restaurant.orders
-                        : "N/A"}
+                      {vendor.status !== "pending" ? vendor.orders : "N/A"}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      {restaurant.status !== "pending"
-                        ? restaurant.revenue
-                        : "N/A"}
+                      {vendor.status !== "pending" ? vendor.revenue : "N/A"}
                     </TableCell>
                     <TableCell>
-                      <RestaurantStatus status={restaurant.status} />
+                      <VendorStatus status={vendor.status} />
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -369,41 +448,49 @@ export default function VendorsPage() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem
-                            onClick={() => handleViewDetails(restaurant)}
+                            onClick={() => handleViewDetails(vendor)}
                           >
                             View details
                           </DropdownMenuItem>
-                          {restaurant.status === "pending" && (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              navigate(`/vendors/${vendor.id}/items`)
+                            }
+                          >
+                            View items
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          {vendor.status === "pending" && (
                             <DropdownMenuItem
                               onClick={() =>
-                                handleUpdateStatus(restaurant.id, "active")
+                                handleUpdateStatus(vendor.id, "active")
                               }
                             >
-                              Approve restaurant
+                              Approve vendor
                             </DropdownMenuItem>
                           )}
-                          {restaurant.status === "active" && (
+                          {vendor.status === "active" && (
                             <DropdownMenuItem
                               onClick={() =>
-                                handleUpdateStatus(restaurant.id, "inactive")
+                                handleUpdateStatus(vendor.id, "inactive")
                               }
                             >
-                              Deactivate restaurant
+                              Deactivate vendor
                             </DropdownMenuItem>
                           )}
-                          {restaurant.status === "inactive" && (
+                          {vendor.status === "inactive" && (
                             <DropdownMenuItem
                               onClick={() =>
-                                handleUpdateStatus(restaurant.id, "active")
+                                handleUpdateStatus(vendor.id, "active")
                               }
                             >
-                              Activate restaurant
+                              Activate vendor
                             </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>Contact owner</DropdownMenuItem>
                           <DropdownMenuItem className="text-rose-500">
-                            Remove restaurant
+                            Remove vendor
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -416,11 +503,11 @@ export default function VendorsPage() {
         </Card>
       </div>
 
-      {selectedRestaurant && (
-        <RestaurantDetailsModal
+      {selectedVendor && (
+        <VendorDetailsModal
           open={isDetailsModalOpen}
           onOpenChange={setIsDetailsModalOpen}
-          restaurant={selectedRestaurant}
+          vendor={selectedVendor}
           onStatusUpdate={(id, status) => handleUpdateStatus(id, status)}
         />
       )}
