@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
+import { VendorStatusProps } from "@/types/vendor";
 
-export default function RestaurantStatus({ status }: { status: string }) {
+export default function VendorStatus({ status }: VendorStatusProps) {
   return (
     <Badge
       variant="outline"
