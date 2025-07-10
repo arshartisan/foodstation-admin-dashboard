@@ -9,6 +9,9 @@ import LoginPage from "@/pages/auth/LoginPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import CustomersPage from "@/pages/customers/CustomersPage";
 import VendorsPage from "@/pages/vendors/VendorsPage";
+import CreateVendorPage from "@/pages/vendors/CreateVendorPage";
+import VendorItemsPage from "@/pages/vendors/VendorItemsPage";
+import CreateVendorItemPage from "@/pages/vendors/CreateVendorItemPage";
 import DeliveryOrdersPage from "@/pages/delivery-orders/DeliveryOrdersPage";
 import StaffsPage from "@/pages/staffs/StaffsPage";
 import TransactionsPage from "@/pages/transactions/TransactionsPage";
@@ -45,6 +48,18 @@ export const router = createBrowserRouter([
       {
         path: "vendors",
         element: <VendorsPage />,
+      },
+      {
+        path: "vendors/create",
+        element: <CreateVendorPage />,
+      },
+      {
+        path: "vendors/:vendorId/items",
+        element: <VendorItemsPage />,
+      },
+      {
+        path: "vendors/:vendorId/items/create",
+        element: <CreateVendorItemPage />,
       },
       {
         path: "delivery-orders",
