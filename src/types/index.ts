@@ -6,6 +6,28 @@ export interface User {
   role: 'admin' | 'manager' | 'staff';
 }
 
+// Notification types
+export interface Notification {
+  id: string;
+  recipient_type: 'user' | 'customer' | 'vendor' | 'all';
+  recipient_id?: string;
+  type: 'info' | 'warning' | 'success' | 'error';
+  title: string;
+  message: string;
+  data?: Record<string, any>;
+  is_read: boolean;
+  createdAt: Date;
+}
+
+export interface CreateNotificationData {
+  recipient_type: 'user' | 'customer' | 'vendor' | 'all';
+  recipient_id?: string;
+  type: 'info' | 'warning' | 'success' | 'error';
+  title: string;
+  message: string;
+  data?: Record<string, any>;
+}
+
 // Customer types
 export interface Customer {
   id: string;

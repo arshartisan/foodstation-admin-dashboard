@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   MessageSquare,
+  Bell,
 } from "lucide-react";
 
 import {
@@ -32,10 +33,11 @@ const navigation = [
   { name: "Customers", href: "/customers", icon: Users },
   { name: "Vendors", href: "/vendors", icon: Store },
   { name: "Delivery Orders", href: "/delivery-orders", icon: Truck },
-  { name: "Staff", href: "/staffs", icon: UserCheck },
-  { name: "Issues & Tickets", href: "/issues", icon: MessageSquare },
   { name: "Transactions", href: "/transactions", icon: Receipt },
   { name: "Payments", href: "/payments", icon: CreditCard },
+  { name: "Staff", href: "/staffs", icon: UserCheck },
+  { name: "Issues & Tickets", href: "/issues", icon: MessageSquare },
+  { name: "Notifications", href: "/notifications", icon: Bell },
   { name: "Settings", href: "/settings", icon: Settings },
 ];
 
