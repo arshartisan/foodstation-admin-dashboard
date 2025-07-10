@@ -45,6 +45,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
 import { CommonMetricCard } from "@/components/common-metric";
+import { StaffDetailsModal } from "@/components/pages/staffs/staff-details-modal";
 
 const initialStaffs = [
   {
@@ -227,6 +228,8 @@ export default function StaffsPage() {
   const navigate = useNavigate();
   const [staffs, setStaffs] = useState(initialStaffs);
   const [selectedTab, setSelectedTab] = useState("all");
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const handleUpdateStatus = (id: number, newStatus: string) => {
     setStaffs(
@@ -239,6 +242,16 @@ export default function StaffsPage() {
       title: "Team member status updated",
       description: `Team member status has been updated to ${newStatus}`,
     });
+  };
+
+  const handleViewDetails = (staff: any) => {
+    setSelectedStaff(staff);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setSelectedStaff(null);
+    setIsDetailsModalOpen(false);
   };
 
   const filteredStaffs = staffs.filter((staff) => {
@@ -505,7 +518,11 @@ export default function StaffsPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>View details</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleViewDetails(staff)}
+                          >
+                            View details
+                          </DropdownMenuItem>
                           <DropdownMenuItem>Edit profile</DropdownMenuItem>
                           <DropdownMenuItem>
                             Manage permissions
@@ -552,6 +569,12 @@ export default function StaffsPage() {
           </CardContent>
         </Card>
       </div>
+
+      <StaffDetailsModal
+        staff={selectedStaff}
+        isOpen={isDetailsModalOpen}
+        onClose={handleCloseDetailsModal}
+      />
     </div>
   );
 }
