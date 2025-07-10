@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowLeft, Save, User, MapPin, Car, DollarSign } from "lucide-react";
+import { ArrowLeft, Save, User, MapPin, Car } from "lucide-react";
 
 interface StaffFormData {
   name: string;
