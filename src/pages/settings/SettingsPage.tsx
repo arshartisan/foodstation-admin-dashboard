@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Bell,
-  Coffee,
-  CreditCard,
-  Globe,
-  Lock,
-  Mail,
-  Save,
-  User,
-} from "lucide-react";
+import { Coffee, CreditCard, Globe, Lock, Save, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
