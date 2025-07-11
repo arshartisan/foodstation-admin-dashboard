@@ -17,8 +17,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowLeft, Save, User, MapPin, Car } from "lucide-react";
+import {
+  ArrowLeft,
+  Save,
+  User,
+  MapPin,
+  Car,
+  Settings,
+  Edit2,
+  Trash2,
+} from "lucide-react";
 
 interface StaffFormData {
   name: string;
@@ -26,10 +42,18 @@ interface StaffFormData {
   phone: string;
   role: string;
   department: string;
-  deliveryZone: string;
   vehicleType: string;
   salary: string;
   permissions: string[];
+}
+
+interface Region {
+  id: string;
+  name: string;
+}
+
+interface RegionFormData {
+  name: string;
 }
 
 const initialFormData: StaffFormData = {
@@ -38,7 +62,6 @@ const initialFormData: StaffFormData = {
   phone: "",
   role: "",
   department: "",
-  deliveryZone: "",
   vehicleType: "",
   salary: "",
   permissions: [],
@@ -49,11 +72,24 @@ const roles = [
   { value: "Delivery Person", label: "Delivery Person" },
 ];
 
-const departments = [
-  { value: "North Region", label: "North Region" },
-  { value: "South Region", label: "South Region" },
-  { value: "East Region", label: "East Region" },
-  { value: "West Region", label: "West Region" },
+// Initial regions data
+const initialRegions: Region[] = [
+  {
+    id: "1",
+    name: "North Region",
+  },
+  {
+    id: "2",
+    name: "South Region",
+  },
+  {
+    id: "3",
+    name: "East Region",
+  },
+  {
+    id: "4",
+    name: "West Region",
+  },
 ];
 
 const vehicleTypes = [
@@ -62,21 +98,6 @@ const vehicleTypes = [
   { value: "Bicycle", label: "Bicycle" },
   { value: "Company Car", label: "Company Car" },
 ];
-
-const getDeliveryZonesByDepartment = (department: string) => {
-  switch (department) {
-    case "North Region":
-      return ["North District", "Zone A1", "Zone A2", "Zone A3"];
-    case "South Region":
-      return ["South District", "Zone B1", "Zone B2", "Zone B3"];
-    case "East Region":
-      return ["East District", "Zone C1", "Zone C2", "Zone C3"];
-    case "West Region":
-      return ["West District", "Zone D1", "Zone D2", "Zone D3"];
-    default:
-      return [];
-  }
-};
 
 const getPermissionsByRole = (role: string) => {
   switch (role) {
@@ -98,6 +119,12 @@ export default function CreateStaffPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<StaffFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [regions, setRegions] = useState<Region[]>(initialRegions);
+  const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
+  const [editingRegion, setEditingRegion] = useState<Region | null>(null);
+  const [regionForm, setRegionForm] = useState<RegionFormData>({
+    name: "",
+  });
 
   const handleInputChange = (field: keyof StaffFormData, value: string) => {
     setFormData((prev) => {
@@ -106,11 +133,6 @@ export default function CreateStaffPage() {
       // Auto-update permissions when role changes
       if (field === "role") {
         updated.permissions = getPermissionsByRole(value);
-      }
-
-      // Reset delivery zone when department changes
-      if (field === "department") {
-        updated.deliveryZone = "";
       }
 
       return updated;
@@ -128,7 +150,6 @@ export default function CreateStaffPage() {
       !formData.phone ||
       !formData.role ||
       !formData.department ||
-      !formData.deliveryZone ||
       !formData.vehicleType ||
       !formData.salary
     ) {
@@ -176,7 +197,70 @@ export default function CreateStaffPage() {
     }
   };
 
-  const deliveryZones = getDeliveryZonesByDepartment(formData.department);
+  // Region management functions
+  const handleOpenRegionModal = (region?: Region) => {
+    if (region) {
+      setEditingRegion(region);
+      setRegionForm({ name: region.name });
+    } else {
+      setEditingRegion(null);
+      setRegionForm({ name: "" });
+    }
+    setIsRegionModalOpen(true);
+  };
+
+  const handleCloseRegionModal = () => {
+    setIsRegionModalOpen(false);
+    setEditingRegion(null);
+    setRegionForm({ name: "" });
+  };
+
+  const handleSaveRegion = () => {
+    if (!regionForm.name.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Region name is required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (editingRegion) {
+      // Update existing region
+      setRegions((prev) =>
+        prev.map((region) =>
+          region.id === editingRegion.id
+            ? { ...region, name: regionForm.name }
+            : region
+        )
+      );
+      toast({
+        title: "Region Updated",
+        description: `${regionForm.name} has been updated successfully.`,
+      });
+    } else {
+      // Add new region
+      const newRegion: Region = {
+        id: Date.now().toString(),
+        name: regionForm.name,
+      };
+      setRegions((prev) => [...prev, newRegion]);
+      toast({
+        title: "Region Created",
+        description: `${regionForm.name} has been created successfully.`,
+      });
+    }
+
+    handleCloseRegionModal();
+  };
+
+  const handleDeleteRegion = (regionId: string) => {
+    setRegions((prev) => prev.filter((region) => region.id !== regionId));
+    toast({
+      title: "Region Deleted",
+      description: "Region has been deleted successfully.",
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -277,50 +361,39 @@ export default function CreateStaffPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="department">Department/Region *</Label>
-                <Select
-                  value={formData.department}
-                  onValueChange={(value) =>
-                    handleInputChange("department", value)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {departments.map((dept) => (
-                      <SelectItem key={dept.value} value={dept.value}>
-                        {dept.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="deliveryZone">Delivery Zone *</Label>
-                <Select
-                  value={formData.deliveryZone}
-                  onValueChange={(value) =>
-                    handleInputChange("deliveryZone", value)
-                  }
-                  disabled={!formData.department}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select delivery zone" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {deliveryZones.map((zone) => (
-                      <SelectItem key={zone} value={zone}>
-                        {zone}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-2">
+                  <Select
+                    value={formData.department}
+                    onValueChange={(value) =>
+                      handleInputChange("department", value)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {regions.map((region) => (
+                        <SelectItem key={region.id} value={region.name}>
+                          {region.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleOpenRegionModal()}
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Vehicle & Compensation */}
-          <Card className="md:col-span-2">
+          <Card className="m">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Car className="h-5 w-5" />
@@ -367,9 +440,100 @@ export default function CreateStaffPage() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Submit Buttons */}
       </form>
+
+      {/* Region Management Modal */}
+      <Dialog open={isRegionModalOpen} onOpenChange={setIsRegionModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {editingRegion ? "Edit Region" : "Create New Region"}
+            </DialogTitle>
+            <DialogDescription>
+              {editingRegion
+                ? "Update the region name and its delivery zones."
+                : "Create a new region with delivery zones."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Region Name */}
+            <div className="space-y-2">
+              <Label htmlFor="regionName">Region Name *</Label>
+              <Input
+                id="regionName"
+                value={regionForm.name}
+                onChange={(e) =>
+                  setRegionForm((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Enter region name"
+              />
+            </div>
+
+            {/* Existing Regions List */}
+            {!editingRegion && (
+              <div className="space-y-2">
+                <Label>Existing Regions</Label>
+                <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
+                  {regions.length > 0 ? (
+                    <div className="space-y-2">
+                      {regions.map((region) => (
+                        <div
+                          key={region.id}
+                          className="flex items-center justify-between bg-gray-50 p-2 rounded"
+                        >
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">
+                              {region.name}
+                            </div>
+                          </div>
+                          <div className="flex gap-1">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleOpenRegionModal(region)}
+                            >
+                              <Edit2 className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteRegion(region.id)}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No regions created yet.
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Modal Actions */}
+          <div className="flex justify-end gap-2 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCloseRegionModal}
+            >
+              Cancel
+            </Button>
+            <Button type="button" onClick={handleSaveRegion}>
+              <Save className="mr-2 h-4 w-4" />
+              {editingRegion ? "Update Region" : "Create Region"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
