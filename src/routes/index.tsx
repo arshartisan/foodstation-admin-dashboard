@@ -4,6 +4,8 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 
 // Auth Pages
 import LoginPage from "@/pages/auth/LoginPage";
+import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 
 // Dashboard Pages
 import DashboardPage from "@/pages/dashboard/DashboardPage";
@@ -27,14 +29,26 @@ export const router = createBrowserRouter([
     element: <Navigate to="/dashboard" replace />,
   },
   {
-    path: "/login",
+    path: "/auth",
     element: <AuthLayout />,
     children: [
       {
-        index: true,
+        path: "login",
         element: <LoginPage />,
       },
+      {
+        path: "forgot-password",
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPasswordPage />,
+      },
     ],
+  },
+  {
+    path: "/login",
+    element: <Navigate to="/auth/login" replace />,
   },
   {
     path: "/",
