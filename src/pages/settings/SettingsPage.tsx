@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Coffee, CreditCard, Globe, Lock, Save, User } from "lucide-react";
+import { Lock, Save, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,10 +43,10 @@ export function SettingsPage() {
         onValueChange={setActiveTab}
         className="w-full"
       >
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 w-full">
+        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 w-full">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="payments">Payments</TabsTrigger>
+          <TabsTrigger value="terms">Terms & Conditions</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
         </TabsList>
 
@@ -100,7 +100,7 @@ export function SettingsPage() {
               </CardFooter>
             </Card>
 
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle>System Preferences</CardTitle>
                 <CardDescription>
@@ -174,7 +174,7 @@ export function SettingsPage() {
                   Save Preferences
                 </Button>
               </CardFooter>
-            </Card>
+            </Card> */}
           </TabsContent>
 
           <TabsContent value="profile" className="space-y-4">
@@ -246,102 +246,68 @@ export function SettingsPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="payments" className="space-y-4">
+          <TabsContent value="terms" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Payment Methods</CardTitle>
+                <CardTitle>Terms & Conditions</CardTitle>
                 <CardDescription>
-                  Manage your payment processing methods.
+                  Manage your platform terms and conditions.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-                        <CreditCard className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-medium">
-                          Credit Card Processing
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          Accept Visa, Mastercard, Amex
-                        </div>
-                      </div>
-                    </div>
-                    <Switch id="credit-card" defaultChecked />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-                        <Globe className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-medium">Digital Wallets</div>
-                        <div className="text-sm text-muted-foreground">
-                          Accept Apple Pay, Google Pay
-                        </div>
-                      </div>
-                    </div>
-                    <Switch id="digital-wallets" defaultChecked />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-                        <Coffee className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-medium">Gift Cards</div>
-                        <div className="text-sm text-muted-foreground">
-                          Accept restaurant gift cards
-                        </div>
-                      </div>
-                    </div>
-                    <Switch id="gift-cards" defaultChecked />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-                        <CreditCard className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-medium">Cash Payments</div>
-                        <div className="text-sm text-muted-foreground">
-                          Accept cash payments
-                        </div>
-                      </div>
-                    </div>
-                    <Switch id="cash" defaultChecked />
-                  </div>
-                </div>
-
-                <div className="pt-4">
                   <div className="space-y-2">
-                    <Label htmlFor="payment-processor">
-                      Default Payment Processor
-                    </Label>
-                    <Select defaultValue="stripe">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select processor" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="stripe">Stripe</SelectItem>
-                        <SelectItem value="square">Square</SelectItem>
-                        <SelectItem value="paypal">PayPal</SelectItem>
-                        <SelectItem value="authorize">Authorize.net</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="terms-title">Terms Title</Label>
+                    <Input
+                      id="terms-title"
+                      defaultValue="Terms of Service - Food Station Admin"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="terms-content">Terms Content</Label>
+                    <Textarea
+                      id="terms-content"
+                      defaultValue="1. ACCEPTANCE OF TERMS
+By accessing and using the Food Station Admin platform, you agree to be bound by these Terms of Service and all applicable laws and regulations.
+
+2. USER ACCOUNTS
+- You are responsible for maintaining the confidentiality of your account credentials
+- You must provide accurate and complete information when creating your account
+- You are responsible for all activities that occur under your account
+
+3. PRIVACY POLICY
+We respect your privacy and are committed to protecting your personal information. Please review our Privacy Policy to understand how we collect, use, and protect your information.
+
+4. ACCEPTABLE USE
+- You may not use the platform for any illegal or unauthorized purpose
+- You may not transmit viruses, worms, or any malicious code
+- You may not attempt to gain unauthorized access to any part of the platform
+
+5. LIMITATION OF LIABILITY
+Food Station Admin shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the platform.
+
+6. MODIFICATIONS
+We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting."
+                      rows={12}
+                      className="text-sm"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="font-medium">Last Updated</div>
+                      <div className="text-sm text-muted-foreground">
+                        When terms were last modified
+                      </div>
+                    </div>
+                    <div className="text-sm font-medium">July 11, 2025</div>
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-end">
+              <CardFooter className="flex justify-end gap-2">
                 <Button>
                   <Save className="mr-2 h-4 w-4" />
-                  Save Payment Settings
+                  Save Terms
                 </Button>
               </CardFooter>
             </Card>
