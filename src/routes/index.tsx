@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import AuthLayout from "@/layouts/AuthLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import DeliveryLayout from "@/layouts/DeliveryLayout";
 
 // Auth Pages
 import LoginPage from "@/pages/auth/LoginPage";
@@ -22,6 +23,17 @@ import PaymentsPage from "@/pages/payments/PaymentsPage";
 import SettingsPage from "@/pages/settings/SettingsPage";
 import IssuesPage from "@/pages/issues/IssuesPage";
 import NotificationsPage from "@/pages/notifications/NotificationsPage";
+
+// Delivery Pages
+import {
+  DeliveryOrdersPage as DeliveryPersonOrdersPage,
+  PendingOrdersPage,
+  InTransitOrdersPage,
+  DeliveredOrdersPage,
+  CancelledOrdersPage,
+  DeliveryProfilePage,
+  RouteMapPage,
+} from "@/pages/delivery";
 
 export const router = createBrowserRouter([
   {
@@ -109,6 +121,44 @@ export const router = createBrowserRouter([
       {
         path: "notifications",
         element: <NotificationsPage />,
+      },
+    ],
+  },
+  {
+    path: "/delivery",
+    element: <DeliveryLayout />,
+    children: [
+      {
+        path: "",
+        element: <Navigate to="/delivery/orders" replace />,
+      },
+      {
+        path: "orders",
+        element: <DeliveryPersonOrdersPage />,
+      },
+      {
+        path: "pending",
+        element: <PendingOrdersPage />,
+      },
+      {
+        path: "in-transit",
+        element: <InTransitOrdersPage />,
+      },
+      {
+        path: "delivered",
+        element: <DeliveredOrdersPage />,
+      },
+      {
+        path: "cancelled",
+        element: <CancelledOrdersPage />,
+      },
+      {
+        path: "map",
+        element: <RouteMapPage />,
+      },
+      {
+        path: "profile",
+        element: <DeliveryProfilePage />,
       },
     ],
   },
