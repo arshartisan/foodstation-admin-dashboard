@@ -35,15 +35,19 @@ export default function MetricCard({
           {trend === "down" && (
             <ArrowDown className="mr-1 h-3 w-3 text-rose-500" />
           )}
-          <span
-            className={cn(
-              trend === "up" && "text-emerald-500",
-              trend === "down" && "text-rose-500"
-            )}
-          >
-            {trendValue}
+          {trend !== "neutral" && (
+            <span
+              className={cn(
+                trend === "up" && "text-emerald-500",
+                trend === "down" && "text-rose-500"
+              )}
+            >
+              {trendValue}
+            </span>
+          )}
+          <span className={cn("ml-1", trend === "neutral" && "ml-0")}>
+            {description}
           </span>
-          <span className="ml-1">{description}</span>
         </p>
       </CardContent>
     </Card>
