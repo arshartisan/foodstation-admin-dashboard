@@ -5,9 +5,7 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  Settings,
   LogOut,
-  Bell,
   User,
   Route,
 } from "lucide-react";
