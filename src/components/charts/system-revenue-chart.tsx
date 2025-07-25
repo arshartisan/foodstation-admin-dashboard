@@ -94,14 +94,14 @@ export function SystemRevenueChart() {
           <Bar
             dataKey="totalRevenue"
             name="Total Revenue"
-            fill="#FE724C"
+            fill="#00A27F"
             radius={[4, 4, 0, 0]}
             barSize={20}
           />
           <Bar
             dataKey="platformFees"
             name="Platform Fees"
-            fill="#FFC529"
+            fill="#FFF215"
             radius={[4, 4, 0, 0]}
             barSize={20}
           />
